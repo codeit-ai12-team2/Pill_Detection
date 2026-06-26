@@ -216,3 +216,34 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ====== ML/DL 추가 ======
+*.pt
+*.pth
+*.h5
+*.ckpt
+*.pkl
+*.bin
+runs/
+logs/
+wandb/
+mlruns/
+
+# 데이터
+data/
+datasets/
+
+# 환경변수 (절대 업로드 금지)
+.env
+secrets.yaml
+kaggle.json
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+
+# 가상환경
+venv/
+.venv/
