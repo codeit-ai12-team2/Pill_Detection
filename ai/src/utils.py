@@ -194,7 +194,7 @@ def draw_boxes(path: str, boxes: list[list[int]]):
         matplotlib Figure 객체
     """
     colors = ["r", "g"]
-    fig, axes = plt.subplots(1, 2, figsize=(10, 5))
+    fig, axes = plt.subplots(1, 2, figsize=(10, 5), dpi=150)
     image = plt.imread(path)
     axes[0].imshow(image)
     axes[0].set_title("Original")
