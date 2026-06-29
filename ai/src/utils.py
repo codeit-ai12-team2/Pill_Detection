@@ -181,3 +181,27 @@ def visualize_dataset_samples(
 
     fig.tight_layout()
     return fig
+
+def draw_boxes(path: str, boxes: list[list[int]]):
+    """
+    이미지 bbox 원본, 수정을 동시에 출력합니다.
+
+    Args:
+        path: 이미지 경로
+        boxes: bbox 좌표 2개의 list (x, y, w, h)
+
+    Returns:
+        matplotlib Figure 객체
+    """
+    colors = ["r", "g"]
+    fig, axes = plt.subplots(1, 2, figsize=(10, 5))
+    image = plt.imread(path)
+    axes[0].imshow(image)
+    axes[0].set_title("Original")
+    axes[1].imshow(image)
+    axes[1].set_title("Modified")
+    for idx, box in enumerate(boxes):
+        x, y, w, h = box
+        axes[idx].add_patch(patches.Rectangle((x, y), w, h, fill=False, edgecolor=colors[idx], linewidth=2))
+        axes[idx].axis("off")
+    return fig
