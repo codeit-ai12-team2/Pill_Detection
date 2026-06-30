@@ -1,5 +1,6 @@
 import os
 import json
+from pathlib import Path
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
@@ -182,3 +183,104 @@ def visualize_sample(
         ax.set_title(str(image_path).split("\\")[-1].split("/")[-1], fontsize=10)
 
     return ax
+
+def collect_all_json(annot_dir: Path) -> list[Path]:
+    """
+    annot_dir에 있는 모든 json 파일 경로 수집
+
+    Args:
+        annot_dir (Path): json 파일이 있는 최상위 폴더 경로
+
+    Returns:
+        list[Path]: 모든 json 파일 경로
+    """
+    json_files = list(annot_dir.rglob("*.json"))
+    return json_files
+
+def build_category_map(json_files: list[Path]) -> dict[int, int], dict[int, int]:
+    """
+    전체 json 파일에서 category_id + name 수집,
+    0부터 시작하는 클래스 인덱스로 매핑
+
+    Args:
+        json_files (list[Path]): collect_all_json으로 수집한 json 파일
+
+    Returns:
+        cat_map: dict{원본 category_id: 클래스 인텍스},
+        id_ to_name: dict{원본 category_id: 클래스명}
+    """
+    category_ids = []
+    id_to_name = {}
+    for jf in json_files:
+        with open(jf) as f:
+            data = json.load(f)
+        for cat in data.get("categories", []):
+            category_ids.append(cat["id"])
+            id_to_name[cat["id"]] = cat["name"]
+
+    sorted_ids = sorted(category_ids)
+    cat_map = {original: idx for idx, original in enumerate(sorted_ids)}
+    return cat_map, id_to_name
+
+def coco_to_yolo(bbox: list, img_w: int, img_h:int) -> tuple:
+    """
+    COCO 포맷(x, y, w, h) -> YOLO(cx, cy, w, h)로 변환
+
+    Args:
+        bbox (list): COCO(x_min, y_min, w, h)
+        img_w (int): 이미지 가로 길이
+        img_h (int): 이미지 세로 길이
+
+    Returns:
+        tuple: {cx, cy, nw, nh} 정규화된 YOLO 포맷
+    """
+    x_min, y_min, w, h = bbox
+    cx = (x_min + w / 2) / img_w
+    cy = (y_min + h / 2) / img_h
+    nw = w / img_w
+    nh = h / img_h
+
+    cx, cy, nw, nh = (
+        min(max(cx, 0), 1),
+        min(max(cy, 0), 1),
+        min(max(nw, 0), 1),
+        min(max(nh, 0), 1),
+    ) 
+
+    return cx, cy, nw, nh
+
+def convert_annotations(
+        json_files: list[Path],
+        cat_map: dict[int, int],
+) -> set[str]:
+    """
+    각 json 파일 YOLO로 변환 후,
+    json 파일과 동일한 위치에 .txt로 저장
+
+    Args:
+        json_files (list[Path]): collect_all_json으로 수집한 json 파일
+        cat_map (dict[int, int]): build_category_map 으로 만든 category_id + 클래스 인덱스
+
+    Returns:
+        set[str]: 새로 생성된 txt 파일 경로
+    """
+    converted: set[str] = set()
+
+    for jf in json_files:
+        with open(jf) as f:
+            data = json.load(f)
+
+        images = {img["id"]: img for img in data["images"]}
+        lines = []                                                      # txt 파일에 쓸 텍스트
+
+        for ann in data["annotations"]:
+            img = images[ann["image_id"]]
+            img_w, img_h = img["width"], img["height"]
+            cls = cat_map[ann["category_id"]]
+            cx, cy, nw, nh = coco_to_yolo(ann["bbox"], img_w, img_h)
+            lines.append(f"{cls} {cx:.0f} {cy:.0f} {nw:.0f} {nh:.0f}\n")
+            txt_path = jf.with_suffix(".txt")
+            txt_path.write_text("".join(lines), encoding="utf-8")
+            converted.add(str(txt_path))
+
+    return converted
