@@ -295,8 +295,6 @@ def get_dataloaders(
 
     normalize = model == "rtdetr"
     resize_size = size if model == "rtdetr" else (640, 640)
-
-    # 전체 이미지 파일명 수집
     file_stems = sorted(p.stem for p in IMAGE_DIR.glob("*.png"))
 
     n_val = int(len(file_stems) * val_ratio)
