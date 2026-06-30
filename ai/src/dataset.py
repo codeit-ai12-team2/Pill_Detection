@@ -14,7 +14,7 @@ from torchvision.transforms import Normalize, ToTensor
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD = [0.229, 0.224, 0.225]
 
-# 이 파일(ai/src/dataset.py) 기준 ai/data/raw 경로 자동 설정
+
 BASE_DIR = Path(__file__).resolve().parent.parent / "data" / "raw"
 IMAGE_DIR = BASE_DIR / "train_images"
 ANNO_DIR = BASE_DIR / "train_annotations"
