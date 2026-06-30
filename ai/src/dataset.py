@@ -10,6 +10,7 @@ from torchvision.transforms import Normalize, ToTensor
 
 # 1. 설정
 
+
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD = [0.229, 0.224, 0.225]
 
@@ -46,7 +47,8 @@ def clip_boxes_xyxy(boxes, img_w, img_h):
 
 
 # 3. 증강 + 리사이즈
-#
+
+
 # 증강
 # Rotation     : -180 ~ 180
 # Vertical     : 50%
