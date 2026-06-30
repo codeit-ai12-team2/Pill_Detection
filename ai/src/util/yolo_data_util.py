@@ -57,8 +57,8 @@ with open(OUTPUT / "classes.txt", "w", encoding="utf-8") as f:
 
 print(f"{len(category_ids)} classes")
 
-# 이미지별로 모든 어노테이션을 수집 (Fix 1, 2: JSON 기준이 아닌 이미지 기준으로 통합)
-image_meta: dict[str, dict] = {}  # image_name → {width, height, anns}
+# image_name → {width, height, anns}
+image_meta: dict[str, dict] = {}
 
 for jf in tqdm(json_files, desc="Parsing annotations\t"):
 
@@ -124,7 +124,6 @@ def convert(image_names: list[str], mode: str):
 
         txt_path = OUTPUT / f"labels/{mode}" / f"{Path(image_name).stem}.txt"
 
-        # Fix 1: 이미지에 속한 모든 어노테이션을 한 번에 씀
         with open(txt_path, "w") as f:
 
             for ann in meta["anns"]:

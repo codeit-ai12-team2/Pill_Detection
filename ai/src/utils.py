@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from PIL import Image
 
-
 def load_sample_from_json(annot_folder_path: str, image_dir: str) -> tuple:
     """
     annotations 폴더에서 해당 이미지 및 바운딩 박스 정도 다운
@@ -197,7 +196,7 @@ def collect_all_json(annot_dir: Path) -> list[Path]:
     json_files = list(annot_dir.rglob("*.json"))
     return json_files
 
-def build_category_map(json_files: list[Path]) -> dict[int, int], dict[int, int]:
+def build_category_map(json_files: list[Path]) -> tuple[dict[int, int], dict[int, int]]:
     """
     전체 json 파일에서 category_id + name 수집,
     0부터 시작하는 클래스 인덱스로 매핑
