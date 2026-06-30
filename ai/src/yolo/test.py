@@ -53,7 +53,7 @@ def main(model_name: str = "yolo11s"):
 
     test_dir = (YOLO_DIR / config["test_dir"]).resolve()
     class_mapping_file = (YOLO_DIR / config["class_mapping_file"]).resolve()
-    output_dir = (YOLO_DIR / config["output_dir"]).resolve()
+    output_dir = (YOLO_DIR / f"../../outputs/{model_name}").resolve()
 
     output_file_path = output_dir / "submission.csv"
     output_file_path.parent.mkdir(parents=True, exist_ok=True)

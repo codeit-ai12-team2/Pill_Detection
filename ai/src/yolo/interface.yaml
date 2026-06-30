@@ -6,4 +6,3 @@ iou: 0.7
 
 test_dir: ../../data/raw/test_images
 class_mapping_file: ../../data/processed/yolo/class_mapping.json
-output_dir: ../../ouputs/yolo11s
