@@ -5,6 +5,7 @@ import pandas as pd
 import torch
 import yaml
 from ultralytics import YOLO
+from tqdm import tqdm
 
 YOLO_DIR = Path(__file__).parent
 
@@ -67,7 +68,7 @@ def main(model_name: str = "yolo11s"):
     rows = []
     annotation_id = 1
 
-    for image_path in sorted(test_dir.glob("*"), key=lambda p: int(p.stem)):
+    for image_path in tqdm(sorted(test_dir.glob("*"), key=lambda p: int(p.stem)), desc="predict\t"):
         image_id = int(image_path.stem)
 
         results = model.predict(
