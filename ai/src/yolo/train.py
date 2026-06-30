@@ -1,39 +1,46 @@
 from pathlib import Path
+
+import torch
 import yaml
 from ultralytics import YOLO
-import torch
 
-def load_config(config_path: str) -> dict:
-    """
-    YAML 설정 파일을 읽어옵니다.
+YOLO_DIR = Path(__file__).parent
 
-    Args:
-        config_path: YAML 파일 경로
 
-    Returns:
-        : 설정 정보를 담은 Dictionary
-    """
-    with open(config_path, "r", encoding="utf-8") as f:
+def load_config(config_path) -> dict:
+    with open(config_path, encoding="utf-8") as f:
         return yaml.safe_load(f)
 
-def main():
-    if torch.cuda.is_available():
-        device = 0
-        print("CUDA is available. Using GPU.")
-    elif torch.backends.mps.is_available():
-        device = "mps"
-        print("MPS is available. Using MPS.")
-    else:
-        print("CUDA or MPS is not available. Using CPU.")
-        device = "cpu"
 
-    train_config = load_config("train.yaml")
-    model_config = load_config("yolo11s.yaml")
+def get_device() -> int | str:
+    if torch.cuda.is_available():
+        print("CUDA is available. Using GPU.")
+        return 0
+    if torch.backends.mps.is_available():
+        print("MPS is available. Using MPS.")
+        return "mps"
+    print("CUDA or MPS is not available. Using CPU.")
+    return "cpu"
+
+
+def main(model_name: str = "yolo11s"):
+    device = get_device()
+
+    train_config = load_config(YOLO_DIR / "train.yaml")
+    model_config = load_config(YOLO_DIR / f"{model_name}.yaml")
 
     config = {**train_config, **model_config}
 
-    model = YOLO(config.pop("model"))
-    model.train(**config, device=device)
+    model_pt = YOLO_DIR / config.pop("model")
+    config["data"] = str((YOLO_DIR / config["data"]).resolve())
+
+    model = YOLO(model_pt)
+    model.train(
+        **config,
+        device=device,
+        project=str(YOLO_DIR / "runs/detect"),
+    )
+
 
 if __name__ == "__main__":
     main()
