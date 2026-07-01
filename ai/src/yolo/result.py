@@ -90,7 +90,7 @@ def show_results(run_dirs: list[Path]) -> pd.DataFrame:
     print(f"\n{'run':<25} {'epoch':>10} {'mAP50-95':>10} {'recall':>10}")
     for _, row in result_df.iterrows():
         print(
-            f"{row['run']:<25} "
+            f"{row['model']:<25} "
             f"{row['best_epoch']:>4}/{row['total_epochs']:<5} "
             f"{row['mAP50-95']:>10} "
             f"{row['recall']:>10}"
