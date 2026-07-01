@@ -97,7 +97,7 @@ def show_results(run_dirs: list[Path]) -> pd.DataFrame:
         )
 
     best = result_df.iloc[0]
-    print(f"\n최고 성능: {best['run']} (epoch {best['best_epoch']}) — mAP50-95 = {best['mAP50-95']}, recall = {best['recall']}")
+    print(f"\n최고 성능: {best['run']} | mAP50-95  {best['mAP50-95']} | recall  {best['recall']}")
 
     return result_df
 
