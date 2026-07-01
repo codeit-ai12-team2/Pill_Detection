@@ -87,10 +87,10 @@ def show_results(run_dirs: list[Path]) -> pd.DataFrame:
     result_df = pd.DataFrame(summaries)
     result_df = result_df.sort_values(by="mAP50-95", ascending=False).reset_index(drop=True)
 
-    print(f"\n{'run':<25} {'epoch':>10} {'mAP50-95':>10} {'recall':>10}")
+    print(f"\n {'model':<20} {'epoch':>12} {'mAP50-95':>14} {'recall':>8}")
     for _, row in result_df.iterrows():
         print(
-            f"{row['model']:<25} "
+            f"{row['run']:<25} "
             f"{row['best_epoch']:>4}/{row['total_epochs']:<5} "
             f"{row['mAP50-95']:>10} "
             f"{row['recall']:>10}"
