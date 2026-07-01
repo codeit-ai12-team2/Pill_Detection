@@ -9,3 +9,7 @@ ipykernel
 jupyter
 gdown
 albumentations
+matplotlib
+tqdm
+ultralytics
+pandas
