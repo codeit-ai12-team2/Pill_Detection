@@ -9,6 +9,7 @@ import argparse
 from pathlib import Path
 
 import pandas as pd
+import re
 import yaml
 
 YOLO_DIR = Path(__file__).parent
@@ -29,7 +30,7 @@ def load_config(config_path) -> dict:
 def find_runs_for_model(model_name: str) -> list[Path]:
     """model_name.yaml의 name 값을 기준으로 runs/detect/{name}* 폴더 탐지
 
-    같은 name으로 여러 번 학습하면 Ultralytics가 name2, name3 ... 로
+    같은 name으로 여러 번 학습하면 Ultralytics가 name-2, name-3 ... 로
     번호를 붙이므로, 접두사가 일치하는 모든 run 탐지
     """
     config = load_config(YOLO_DIR / f"{model_name}.yaml")
@@ -37,11 +38,12 @@ def find_runs_for_model(model_name: str) -> list[Path]:
 
     if not RUNS_DIR.exists():
         return []
+    
+    pattern = re.compile(rf"^{re.escape(run_name)}(-?\d+)?$")
 
     return sorted(
         p for p in RUNS_DIR.iterdir()
-        if p.is_dir() and (p.name == run_name or p.name.startswith(f"{run_name}2"))
-        and (p / "results.csv").exists()
+        if p.is_dir() and pattern.match(p.name) and (p / "results.csv").exists()
     )
 
 
