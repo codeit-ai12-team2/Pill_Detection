@@ -1,3 +1,9 @@
+# --- PyTorch (CUDA 13.0 빌드) ---
+# 아래 --extra-index-url을 통해서만 정확한 cu130 빌드가 설치됩니다.
+--extra-index-url https://download.pytorch.org/whl/cu130
+torch==2.12.1+cu130
+torchvision==0.27.1+cu130
+
 albucore==0.0.24
 albumentations==2.0.8
 annotated-types==0.7.0
@@ -138,7 +144,7 @@ notebook_shim==0.2.4
 numpy==2.4.6
 nvidia-ml-py==13.580.82
 openai==1.109.1
-opencv-python
+# opencv: headless만 사용 (RunPod 컨테이너엔 디스플레이가 없으므로 opencv-python과 동시 설치 시 충돌 위험)
 opencv-python-headless
 opentelemetry-api==1.43.0
 optree==0.18.0
