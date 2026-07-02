@@ -44,8 +44,8 @@ def get_augmentations() -> list:
         #     p=0.2,
         # ),
         # Color and contrast adjustments
-        # A.CLAHE(clip_limit=4.0, tile_grid_size=(8, 8), p=0.5),
-        # A.RandomBrightnessContrast(brightness_limit=0.3, contrast_limit=0.3, p=0.5),
+        A.CLAHE(clip_limit=4.0, tile_grid_size=(8, 8), p=0.5),
+        A.RandomBrightnessContrast(brightness_limit=0.3, contrast_limit=0.3, p=0.5),
         # A.HueSaturationValue(hue_shift_limit=20, sat_shift_limit=30, val_shift_limit=20, p=0.5),
         # # Simulate occlusions
         # A.CoarseDropout(
