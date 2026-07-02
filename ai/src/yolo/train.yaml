@@ -1,4 +1,4 @@
-data: ../../data/processed/yolo/dataset.yaml
+data: ../../data/processed/shared/dataset.yaml
 
 epochs: 100
 batch: 16
@@ -9,16 +9,11 @@ optimizer: auto
 mosaic: 0.0
 mixup: 0.0
 copy_paste: 0.0
-hsv_h: 0.0
-hsv_s: 0.0
-hsv_v: 0.0
-degrees: 0.0
-translate: 0.0
-scale: 0.0
-shear: 0.0
-perspective: 0.0
-flipud: 0.0
-fliplr: 0.0
-erasing: 0.0
 
 seed: 42
+
+cos_lr: false
+hsv_h: 0
+degrees: 0
+flipud: 0
+perspective: 0
