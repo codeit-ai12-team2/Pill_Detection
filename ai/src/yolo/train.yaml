@@ -6,7 +6,7 @@ imgsz: 640
 
 optimizer: auto
 
-mosaic: 0.5
+mosaic: 0.0
 mixup: 0.0
 copy_paste: 0.0
 
@@ -14,8 +14,6 @@ seed: 42
 
 cos_lr: false
 hsv_h: 0
-hsv_s: 0.3
-degrees: 180.0
-flipud: 0.5
+degrees: 0
+flipud: 0
 perspective: 0
-erasing: 0.2
